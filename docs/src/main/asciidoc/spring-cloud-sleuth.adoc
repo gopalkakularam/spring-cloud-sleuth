@@ -420,6 +420,11 @@ There are two properties to achieve this.
 With the `spring.sleuth.baggage-keys`, you set keys that get prefixed with `baggage-` for HTTP calls and `baggage_` for messaging.
 You can also use the `spring.sleuth.propagation-keys` property to pass a list of prefixed keys that are whitelisted without any prefix.
 
+In order to automatically set the baggage values to Slf4j's MDC, you have to set
+the `spring.sleuth.log.slf4j.whitelisted-mdc-keys` property with a list of whitelisted
+baggage keys. E.g. `spring.sleuth.log.slf4j.whitelisted-mdc-keys=foo` will set the value of the
+`foo` baggage into MDC.
+
 ==== Extracting a Propagated Context
 
 The `TraceContext.Extractor<C>` reads trace identifiers and sampling status from an incoming request or message.
@@ -1031,6 +1036,12 @@ You can configure which URIs you would like to skip by setting the `spring.sleut
 If you have `ManagementServerProperties` on classpath, its value of `contextPath` gets appended to the provided skip pattern.
 If you want to reuse the Sleuth's default skip patterns and just append your own, pass those patterns by using the `spring.sleuth.web.additionalSkipPattern`.
 
+To change the order of tracing filter registration, please set the
+`spring.sleuth.web.filter-order` property.
+
+To disable the filter that logs uncaught exceptions you can disable the
+`spring.sleuth.web.exception-throwing-filter-enabled` property.
+
 ==== HandlerInterceptor
 
 Since we want the span names to be precise, we use a `TraceHandlerInterceptor` that either wraps an existing `HandlerInterceptor` or is added directly to the list of existing `HandlerInterceptors`.
@@ -1051,6 +1062,9 @@ For example, if the request was sent to `/this/that`, the name is `http:/this/th
 You can configure which URIs you would like to skip by using the `spring.sleuth.web.skipPattern` property.
 If you have `ManagementServerProperties` on the classpath, its value of `contextPath` gets appended to the provided skip pattern.
 If you want to reuse Sleuth's default skip patterns and append your own, pass those patterns by using the `spring.sleuth.web.additionalSkipPattern`.
+
+To change the order of tracing filter registration, please set the
+`spring.sleuth.web.filter-order` property.
 
 ==== Dubbo RPC support
 
